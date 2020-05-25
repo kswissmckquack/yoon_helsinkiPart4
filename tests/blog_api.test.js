@@ -38,17 +38,15 @@ describe('Blog testing suite', () => {
     const userObject = new User(testUser);
     await userObject.save();
     // get Token
-    api
+    const res = await api
       .post('/api/login')
       .send({
         username: testUser.username,
         password: password,
       })
-      .end((err, res) => {
-        token = res.body.token;
-      });
+    token = res.body.token;
 
-    userId = userObject._id;
+    const userId = userObject._id;
 
     let blogObject = new Blog(initialBlogs[0]);
     blogObject.user = userId;
@@ -90,15 +88,13 @@ describe('Blog testing suite', () => {
       title: 'testing 123',
       author: 'jorge or is it',
       url: 'www.reddit.com',
-      likes: 67,
-      user: userId,
+      likes: 67
     });
     const res = await
     api
       .post('/api/blogs')
       .set('Authorization', `Bearer ${token}`)
       .send(newBlog);
-
     expect(res.body.title).toBe(newBlog.title);
   });
 

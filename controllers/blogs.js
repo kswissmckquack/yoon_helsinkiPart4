@@ -29,8 +29,8 @@ blogsRouter.post('/', async (req, res, next) => {
 
   const title = body.title;
   const url = body.url;
-
   const user = await User.findById(decodedToken.id);
+  const userId = user._id
 
   if (!title || !url) {
     return res.status(400).end();
@@ -41,7 +41,7 @@ blogsRouter.post('/', async (req, res, next) => {
     author: body.author,
     url: body.url,
     likes: body.likes,
-    user: user._id,
+    user: userId,
   });
 
   const savedBlog = await blog.save();
