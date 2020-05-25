@@ -30,7 +30,7 @@ blogsRouter.post('/', async (req, res, next) => {
   const title = body.title;
   const url = body.url;
 
-  const user = await User.findOne({}); //just for now until login est.
+  const user = await User.findById(decodedToken.id);
 
   if (!title || !url) {
     return res.status(400).end();
@@ -67,8 +67,21 @@ blogsRouter.put('/:id', async (req, res, next) => {
 });
 
 blogsRouter.delete('/:id', async (req, res, next) => {
-  await Blog.findByIdAndRemove(req.params.id)
-  res.status(204).end();
+  //probably make a helper to not repeat this code everytime
+  const decodedToken = jwt.verify(req.token, process.env.SECRET);
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: 'token missing or invalid' });
+  }
+  const userId = decodedToken.id;
+  const user = await User.findById(userId);
+  const blogToDelete = await Blog.findById(req.params.id);
+
+  if ( blogToDelete.user.toString() === userId.toString() ) {
+    await Blog.findByIdAndRemove(req.params.id)
+    res.status(204).end();
+  }
+
+  res.status(403).json({ error: 'Permission denied' })
 });
 
 module.exports = blogsRouter;
