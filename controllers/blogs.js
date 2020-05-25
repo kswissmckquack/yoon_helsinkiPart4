@@ -30,7 +30,7 @@ blogsRouter.post('/', async (req, res, next) => {
   const title = body.title;
   const url = body.url;
   const user = await User.findById(decodedToken.id);
-  const userId = user._id
+  const userId = user._id;
 
   if (!title || !url) {
     return res.status(400).end();
@@ -62,7 +62,7 @@ blogsRouter.put('/:id', async (req, res, next) => {
     likes: body.likes,
   };
 
-  const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
+  const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, { new: true });
   res.json(updatedBlog.toJSON());
 });
 
@@ -76,12 +76,12 @@ blogsRouter.delete('/:id', async (req, res, next) => {
   const user = await User.findById(userId);
   const blogToDelete = await Blog.findById(req.params.id);
 
-  if ( blogToDelete.user.toString() === userId.toString() ) {
-    await Blog.findByIdAndRemove(req.params.id)
+  if (blogToDelete.user.toString() === userId.toString()) {
+    await Blog.findByIdAndRemove(req.params.id);
     res.status(204).end();
   }
 
-  res.status(403).json({ error: 'Permission denied' })
+  res.status(403).json({ error: 'Permission denied' });
 });
 
 module.exports = blogsRouter;

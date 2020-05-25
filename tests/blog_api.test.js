@@ -43,10 +43,10 @@ describe('Blog testing suite', () => {
       .send({
         username: testUser.username,
         password: password,
-      })
+      });
     token = res.body.token;
 
-    const userId = userObject._id;
+    userId = userObject._id;
 
     let blogObject = new Blog(initialBlogs[0]);
     blogObject.user = userId;
@@ -83,18 +83,33 @@ describe('Blog testing suite', () => {
     expect(res.body.map(b => b.id)).toBeDefined();
   });
 
+  test('403 if new blog without token', async () => {
+    const newBlog = new Blog({
+      title: 'testing 123',
+      author: 'jorge or is it',
+      url: 'www.reddit.com',
+      likes: 67,
+    });
+    const res = await
+    api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(403)
+  });
+
   test('new blog added', async () => {
     const newBlog = new Blog({
       title: 'testing 123',
       author: 'jorge or is it',
       url: 'www.reddit.com',
-      likes: 67
+      likes: 67,
     });
     const res = await
     api
       .post('/api/blogs')
       .set('Authorization', `Bearer ${token}`)
       .send(newBlog);
+
     expect(res.body.title).toBe(newBlog.title);
   });
 
