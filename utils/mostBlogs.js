@@ -7,16 +7,15 @@ const mostBlogs = (blogs) => {
       if (a === b.author) {
         num++;
       }
-    })
-    return { author:a, blogs: num}
+    });
+    return { author: a, blogs: num };
   });
   const totalBlogs = authorTotalBlogs.map(b => b.blogs);
   const maxBlogs = Math.max.apply(null, totalBlogs);
   const maxIndex = totalBlogs.indexOf(maxBlogs);
-  const mostBlogs = authorTotalBlogs[maxIndex]//will only get first max
-  return mostBlogs
+  return authorTotalBlogs[maxIndex]; //will only get first max
 };
 
 module.exports = {
   mostBlogs,
-}
+};

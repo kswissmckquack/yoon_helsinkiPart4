@@ -14,5 +14,5 @@ describe('most blogs', () => {
     ];
     const result = mostBlogs.mostBlogs(blogs);
     expect(result).toEqual({ author: 'james', blogs: 3 });//use toEqual for objects
-  })
-})
+  });
+});
